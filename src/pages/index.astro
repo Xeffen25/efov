@@ -1,0 +1,69 @@
+---
+import Layout from '@/layouts/layout.astro';
+---
+
+<Layout title="EFOV - Eminence Form Validator" description="A minimal Javascript Library to Validate Forms in an efficient and customizable method.">
+	<h1>EFOV - Eminence Form Validator</h1>
+	<form data-efov-form="0">
+		<!-- 
+		<label>palindrome</label>
+		<input type="text" id="palindromeChecker" data-efov='{}' aria-describedby="efovErrorUl0">
+		<ul id="efovErrorUl0"></ul>
+		<input type="text" minlength="10" data-efov='{"minlengthMSG":"Minimum Characters 10"}' aria-describedby="efovErrorUl1">
+		<ul id="efovErrorUl1"></ul>
+		<input type="checkbox">
+		<input type="color">
+		<input type="date" max="2003-05-29" step="3">
+		<input type="datetime-local">
+		
+		<input type="email"  minlength="15">
+		<label for="ast">File</label>
+		<input id="ast" type="file" accept="">
+		<input type="month">
+		-->
+		<input type="number" min="15" max="30" step="5" data-efov-form="1000" required data-efov='{}'  aria-describedby="ul1">
+		<ul id="ul1"></ul>
+		<input type="submit">
+		<!-- 
+		<input type="password">
+		<input type="radio">
+		<input type="range">
+		<input type="search">
+		<input type="tel">
+		<input type="text">
+		<input type="time">
+		<input type="url">
+		<input type="week">
+		<fieldset data-efov='{"requiredMSG":"U are required to select on of these"}' aria-describedby="efovErrorUl5">
+			<label>1<input name="test" type="radio"></label>
+			<label>2<input name="test" type="radio"></label>
+			<label>3<input name="test" type="radio"></label>
+			<label>4<input name="test" type="radio"></label>
+			<label>5<input name="test" type="radio"></label>
+		</fieldset>
+		<ul id="efovErrorUl5"></ul>
+		
+		-->
+		<!-- submit, reset, button, hidden -->
+	</form>
+	<!--
+	<script>
+		
+		// @ts-nocheck
+		document.addEventListener('DOMContentLoaded', function() {
+		  const input = document.getElementById('palindromeChecker');
+		  // Ensure input.efovC is an array where custom validation functions will be stored
+		  input.efovC = input.efovC || [];
+		  // Push a new custom validation function into input.efovC
+		  input.efovC.push(function() {
+			// Correctly use input.value to get the current value of the input field
+			if (input.value !== input.value.split('').reverse().join('')) {
+			  return ["Is not a palindrome"]; // Return an array with an error message
+			}
+			return []; // Return an empty array to indicate no errors
+		  });
+		});
+	  </script>
+	  -->
+	  
+</Layout>
