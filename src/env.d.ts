@@ -10,7 +10,7 @@ declare global {
             T: HTMLElement; // Target Element to insert the Error List
             F: EfovElement; // Element to Focus if validity fails. Reduces code size
             I?: function; // Function that checks for input with the corresponding delay can be null if only checks on submit
-            V: boolean; // Validates input and returns if it isValid
+            V: () => boolean; // Validates input and returns if it isValid
 
             notTrim?: boolean; // true if u don't want to trim the input before checking its validity
 

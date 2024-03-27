@@ -1,7 +1,9 @@
-const EFOV_PREVENT_TOOLTIP = true;
+const EFOV_PREVENT_TOOLTIP = false; // Will show the custom list of errors to the browser tooltip if false too
 const EFOV_VALID_CLASS = 'efov-valid';
 const EFOV_INVALID_CLASS = 'efov-invalid';
-const EFOV_TARGET_ATTRIBUTE = 'aria-describedby';
+const EFOV_SHOW_CLASS = 'efov-show';
+const EFOV_HIDELIST_CLASS = 'efov-hidden';
+const EFOV_TARGET_ATTRIBUTE = 'aria-errormessage';
 const EFOV_ERROR_ELEMENT = '<li class="efov-error-li">{error}</li>';
 
 function addMSG(input: EfovElement, msg: any) {
@@ -14,12 +16,16 @@ function addMSG(input: EfovElement, msg: any) {
 function manageAriaLiveForErrorList(errorList: HTMLElement, hasErrors: boolean) {
   if (hasErrors) {
     errorList.setAttribute('aria-live', 'assertive');
+    errorList.classList.add(EFOV_SHOW_CLASS);
+    errorList.classList.remove(EFOV_HIDELIST_CLASS);
   } else {
     errorList.removeAttribute('aria-live');
+    errorList.classList.add(EFOV_HIDELIST_CLASS);
+    errorList.classList.remove(EFOV_SHOW_CLASS);
   }
 }
 function updateErrorList(input: EfovElement) {
-  let newErrorContent = input.efov.E.map(error =>
+  const newErrorContent = input.efov.E.map(error =>
     EFOV_ERROR_ELEMENT.replaceAll('{error}', error)
   ).join('');
   if (input.efov.T.innerHTML !== newErrorContent) {
@@ -32,6 +38,8 @@ function markInputAsInvalid(input: EfovElement) {
   if (input.efov.E.length === 0) {
     // if no errors in efovE add default browser Message to list to use that instead  
     addMSG(input, input.validationMessage);
+  }else {
+    input.setCustomValidity(input.efov.E.join("\n"));
   }
   input.classList.add(EFOV_INVALID_CLASS);
   input.classList.remove(EFOV_VALID_CLASS);
@@ -60,10 +68,11 @@ function updateInput(input: EfovElement) {
 
 function validateInput(input: EfovElement) { 
   input.efov.E = [];
+  input.efov.isValid = true;
   let value = input.value;
   const validity = input.validity;
-  if (!input.efov.notTrim){
-    value = value.trim()
+  if (!input.efov.notTrim && value){
+    value = value.trim();
   }
   if (input.efov.requiredMSG && input.validity.valueMissing) {
     addMSG(input, input.efov.requiredMSG);
@@ -71,11 +80,12 @@ function validateInput(input: EfovElement) {
     switch (input.type) {
       case 'text':
       case 'password':
+      case 'textarea':
       case 'tel':
       case 'search':
       case 'email':
       case 'url':
-        if (input.efov.maxlength && value.length > parseInt(input.efov.maxlength)) {
+        if (input.efov.maxlength && value.length > parseInt(input.efov.maxlength, 10)) {
           addMSG(input, input.efov.maxlengthMSG);
         }
         if (validity.tooShort) {
@@ -168,7 +178,7 @@ function updateListener(input: EfovElement, delay: number) {
   if (delay === 0) {
       input.addEventListener('input', input.efov.I);
   } else if (delay > 0) {
-      let timeoutId: number | null = null;
+      let timeoutId: any = null; // fix any
       input.efov.I = () => {
           clearTimeout(timeoutId);
           timeoutId = setTimeout(() => updateInput(input), delay);
@@ -183,14 +193,11 @@ function loadEFOV(input: EfovElement) {
   input.efov.E = []; // Aray of Error list of strings, if empty the input is valid for EFOV
   input.efov.F = input;
   input.efov.isValid = false; 
-  if (input.nodeName === 'TEXTAREA') {
-    input.type = 'text';
-  }
   if (input.nodeName === 'FIELDSET') {
     input.type = 'radio';
     input.efov.F = input.querySelector('input[type="radio"]')!;
   }
-  input.efov.V = validateInput(input);
+  input.efov.V = () => validateInput(input);
 }
 
 function initializeEFOV() {
@@ -204,9 +211,11 @@ function initializeEFOV() {
   });
   document.querySelectorAll('form[data-efov-form]').forEach(selected => {
     const form = selected as HTMLFormElement;
-    form.setAttribute('novalidate', '');
+    if (EFOV_PREVENT_TOOLTIP) {
+      form.setAttribute('novalidate', '');
+    }
     const formDelay = parseInt(form.getAttribute('data-efov-form')!, 10); // expects the data-efov-form to be an int
-    form.querySelectorAll('input[data-efov-form], textarea[data-efov-form], fieldset[data-efov-form]').forEach(element => {
+    form.querySelectorAll('input[data-efov], textarea[data-efov], fieldset[data-efov]').forEach(element => {
       const input = element as EfovElement;
       loadEFOV(input);
       if (input.efov.delay == undefined) {
@@ -215,20 +224,17 @@ function initializeEFOV() {
       updateListener(input, input.efov.delay);
     });
     form.addEventListener('submit', event => {
-      let invalid = false;
-      form.querySelectorAll('input[data-efov-form], textarea[data-efov-form], fieldset[data-efov-form]').forEach(element => {
+      form.querySelectorAll('input[data-efov], textarea[data-efov], fieldset[data-efov]').forEach(element => {
         const input = element as EfovElement;
-        if(updateInput(input)){
-          invalid = true;
-        }
+        updateInput(input);
       });
-      if (invalid) {
+      const invalidInput = form.querySelector('.efov-invalid') as EfovElement;
+      if (invalidInput !== null) {
         event.preventDefault();
-        const invalidInput = form.querySelector('.efov-invalid') as EfovElement;
         invalidInput.efov.F.focus();
       }
     });
-  })
+  });
 }
 document.addEventListener('DOMContentLoaded', initializeEFOV);
 
@@ -237,18 +243,9 @@ if the form has a data-efov-form when attempting to submit it, it will instead c
 if no elements inside the form have meet the criteria if will follow its default behaviour
 if data-efov is empty it will just perform the checks in and place the messages in the describedby
 */
+// TODO: add the errors to the customValidity() too si that the pseudo-class is set for :valid :invalid ant if the browser tooltip is enabled it shows the customChecks as it won't if not
 // TODO add flag at the top like delay to show or not the customValidity Message on submit with our errorE list instead?
-// TODO add flag to be able to set inside what tag we search the id
-// TODO: add flag to be able to cusomize the slot in which each message is inserted in
-// TODO: fix the form being required not showing the custom message.
-// TODO: add area radiogroup to fieldset
 // TODO: check if there should be an aria-role on the ul list or something like that to indicate it is an error list for the input, maybe tooltip, try to check with the native error if it has an exixting aria
-// TODO: if no MSG is set use the default browser message to the list if it is not valid but has no messages in the efovE
-// TODO: convert the native mesage when validation fails to a custom one, prevent the valedation from showing as it has been doing, show it instead in the ul list
-// TODO: add the customValidations as custom validations on the input? Consides how all this is done, how does the browser handle multiple errors etc  as they must go to list
-// TODO: fix that the default message is displayed when attempting to submit
-// TODO: fix radio type fielset. add a min and a maximum? The bug is that it only works to submit when the first submit attempt is correct 
-// TODO: manage readibility of efovL and efovE with comments, they can replace all like efovL=efov.erroListId/target and efovE=efovErrorsList
 // TODO: the return of custom functions can be null, undefined or false to signalize they passed the check, and if not it expects an arry of strings(must be array of strings) to add to the error list, the text is pased as html inside the li element
 // TODO: create a page that helps generate a form, json or input where u can also add classes, id or whatever
 // TODO: add schema to docs

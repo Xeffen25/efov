@@ -14,5 +14,9 @@
     "@astrojs/cloudflare": "^9.2.0",
     "astro": "^4.5.9",
     "typescript": "^5.4.3"
+  },
+  "devDependencies": {
+    "cypress": "^13.7.1",
+    "wrangler": "^3.37.0"
   }
 }

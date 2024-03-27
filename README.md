@@ -1,3 +1,27 @@
+# EFOV - Eminence Form Validation Library
+
+EFOV (Eminence Form Validation) is a lightweight, accessible, and easy-to-use JavaScript library designed to enhance form validation feedback in web applications. It seamlessly integrates with native HTML form validation, providing a more visually appealing and accessible error message display, while also offering an easy interface for adding custom validations.
+
+## Key Features
+
+- **Accessible Error Display**: Uses `aria` attributes to enhance accessibility (customizable but we provide a recommended), ensuring error messages are easily perceivable by users with assistive technologies.
+- **Native Browser Validation Fallback**: Leverages the browser's built-in validation messages as fallbacks, ensuring reliability and native feel.
+- **Custom Validations**: Offers an easy-to-use interface for adding custom validation functions, providing flexibility for complex form validation scenarios.
+- **Delay and Trigger Options**: Allows setting validation to trigger on form submission, live as user types, or with a custom delay, providing control over the user experience.
+- **Visual Customization**: Easy to style error messages and validation states using predefined classes, allowing for seamless integration with your design system.
+
+## Installation
+
+### Method 1: Including `efov.min.js`
+
+1. Download the `efov.min.js` file from the repository and place it in your project directory.
+2. Include the script in your HTML file anywhere, it waits for DOMContentLoaded:
+
+   ```html
+   <script src="path/to/your/directory/efov.min.js"></script>
+
+
+
 # EFOV - Eminence Form Validator
 
 Welcome to EFOV (Eminence Form Validator), a robust and efficient front-end library crafted to enhance form validation within web applications. Developed by Xeffen25, EFOV aims to streamline the client-side validation process, offering a user-friendly approach to ensuring data integrity and user input validation.

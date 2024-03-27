@@ -5,46 +5,53 @@ import Layout from '@/layouts/layout.astro';
 <Layout title="EFOV - Eminence Form Validator" description="A minimal Javascript Library to Validate Forms in an efficient and customizable method.">
 	<h1>EFOV - Eminence Form Validator</h1>
 	<form data-efov-form="0">
-		<!-- 
-		<label>palindrome</label>
-		<input type="text" id="palindromeChecker" data-efov='{}' aria-describedby="efovErrorUl0">
-		<ul id="efovErrorUl0"></ul>
-		<input type="text" minlength="10" data-efov='{"minlengthMSG":"Minimum Characters 10"}' aria-describedby="efovErrorUl1">
-		<ul id="efovErrorUl1"></ul>
-		<input type="checkbox">
-		<input type="color">
-		<input type="date" max="2003-05-29" step="3">
-		<input type="datetime-local">
 		
-		<input type="email"  minlength="15">
-		<label for="ast">File</label>
-		<input id="ast" type="file" accept="">
-		<input type="month">
-		-->
-		<input type="number" min="15" max="30" step="5" data-efov-form="1000" required data-efov='{}'  aria-describedby="ul1">
-		<ul id="ul1"></ul>
-		<input type="submit">
-		<!-- 
-		<input type="password">
-		<input type="radio">
-		<input type="range">
-		<input type="search">
-		<input type="tel">
-		<input type="text">
-		<input type="time">
-		<input type="url">
-		<input type="week">
-		<fieldset data-efov='{"requiredMSG":"U are required to select on of these"}' aria-describedby="efovErrorUl5">
-			<label>1<input name="test" type="radio"></label>
-			<label>2<input name="test" type="radio"></label>
-			<label>3<input name="test" type="radio"></label>
-			<label>4<input name="test" type="radio"></label>
-			<label>5<input name="test" type="radio"></label>
+		<input type="number" min="15" max="30" step="5" required data-efov='{}' aria-errormessage="ulNumber">
+		<ul id="ulNumber" class="efov-error-ul"></ul>
+
+		<input id="inputText" type="text" data-efov='{}' aria-errormessage="ulText">
+		<ul id="ulText" class="efov-error-ul"></ul>
+		<input type="tel" data-efov='{}' aria-errormessage="ulTel">
+		<ul id="ulTel" class="efov-error-ul"></ul>
+		<input type="search" data-efov='{}' aria-errormessage="ulSearch">
+		<ul id="ulSearch" class="efov-error-ul"></ul>
+		<input type="password" data-efov='{}' aria-errormessage="ulPassword">
+		<ul id="ulPassword" class="efov-error-ul"></ul>
+		<input type="url" data-efov='{}' aria-errormessage="ulUrl">
+		<ul id="ulUrl" class="efov-error-ul"></ul>
+		<input type="email" data-efov='{}' aria-errormessage="ulEmail">
+		<ul id="ulEmail" class="efov-error-ul"></ul>
+
+		<input type="file" data-efov='{}' aria-errormessage="ulFile">
+		<ul id="ulFile" class="efov-error-ul"></ul>
+
+		<input type="date" data-efov='{}' aria-errormessage="ulDate">
+		<ul id="ulDate" class="efov-error-ul"></ul>
+		<input type="datetime-local" data-efov='{}' aria-errormessage="ulDatetime">
+		<ul id="ulDatetime" class="efov-error-ul"></ul>
+		<input type="month" data-efov='{}' aria-errormessage="ulMonth">
+		<ul id="ulMonth" class="efov-error-ul"></ul>
+		<input type="week" data-efov='{}' aria-errormessage="ulWeek">
+		<ul id="ulWeek" class="efov-error-ul"></ul>
+		<input type="time" data-efov='{}' aria-errormessage="ulTime">
+		<ul id="ulTime" class="efov-error-ul"></ul>
+		
+		<textarea minlength="100" data-efov='{"maxlength":"120","maxlengthMSG":"Max 120"}' aria-errormessage="ulTextarea"></textarea>
+		<ul id="ulTextarea" class="efov-error-ul"></ul>
+
+		<fieldset data-efov='{"requiredMSG":"Tienes que elegir uno de los colores"}' aria-errormessage="ulRadios" role="radiogroup">
+			<label>1<input name="test" type="radio" required></label>
+			<label>2<input name="test" type="radio" required></label>
+			<label>3<input name="test" type="radio" required></label>
+			<label>4<input name="test" type="radio" required></label>
+			<label>5<input name="test" type="radio" required></label>
 		</fieldset>
-		<ul id="efovErrorUl5"></ul>
-		
-		-->
-		<!-- submit, reset, button, hidden -->
+		<ul id="ulRadios" class="efov-error-ul"></ul>
+
+		<input type="checkbox" required data-efov='{"requiredMSG":"Tienes que aceptar que este formulario es perfecto."}' aria-errormessage="ulCheckboc">
+		<ul id="ulCheckboc" class="efov-error-ul"></ul>
+
+		<input type="submit">
 	</form>
 	<!--
 	<script>
